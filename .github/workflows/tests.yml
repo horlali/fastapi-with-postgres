@@ -1,0 +1,101 @@
+name: Testing
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  Testing:
+    runs-on: ubuntu-latest
+
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.11]
+
+    steps:
+      #----------------------------------------------
+      #       check-out repo and set-up python
+      #----------------------------------------------
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      #----------------------------------------------
+      #  load poetry installation cache if it exist
+      #----------------------------------------------
+      - name: Load cached Poetry installation
+        id: cached-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local # the path depends on the OS
+          key: poetry-0 # increment to reset cache
+
+      #----------------------------------------------
+      #  -----  install & configure poetry  -----
+      #----------------------------------------------
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      #----------------------------------------------
+      #       load cached venv if cache exists
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/pyproject.toml') }}
+
+      #----------------------------------------------
+      # install dependencies if cache does not exist
+      #----------------------------------------------
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+
+      #----------------------------------------------
+      #              make scripts executable
+      #----------------------------------------------
+      - name: Make scripts executable
+        run: chmod +x scripts/*
+
+      #----------------------------------------------
+      #              run quality checks
+      #----------------------------------------------
+      - name: Code Quality
+        run: ./scripts/run-linters.sh
+
+      #----------------------------------------------
+      #              run test suite
+      #----------------------------------------------
+      - name: Run test
+        # env:
+        #   ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
+        #   SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        #   SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+        #   SENDGRID_HOST_USER: ${{ secrets.SENDGRID_HOST_USER }}
+        run: ./scripts/run-tests.sh --actions
+
+      #----------------------------------------------
+      #          codecov coverage report
+      #----------------------------------------------
+      # - name: Upload coverage reports to Codecov
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      #     files: ./coverage.xml
+      #     directory: ./coverage/reports/
+      #     fail_ci_if_error: true
