@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "fido-api"
+version = "0.1.0"
+description = ""
+authors = ["se7en <gideon.ahiadzi@gmail.com>"]
+readme = "README.md"
+packages = [{include = "fido_api", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
