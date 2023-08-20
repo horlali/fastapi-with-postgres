@@ -36,15 +36,20 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 WORKDIR ${PROJECT_DIR}
 COPY pyproject.toml poetry.lock ${PROJECT_DIR}
 
-# Install dependencies:
-RUN poetry install --without dev
+# Install dependencies
+RUN poetry install --no-root --without dev
 
+# Expose port
 EXPOSE 8000
 
 # Copy project
 COPY . .
 
+# Install project:
+RUN poetry install --only-root
+
+# Make scripts executable
 RUN chmod +x ./scripts/*
 
 # Start Application
-CMD [ "./scripts/run-server.sh", "--docker", "--prod" ]
+CMD [ "./scripts/run-server.sh"]
