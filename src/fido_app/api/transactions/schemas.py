@@ -7,10 +7,10 @@ from fido_app.utils.extentions import PaymentMethod, TransactionStatus, Transact
 
 class TransactionBase(BaseModel):
     user_id: int
-    full_name: str
     date: datetime
     amount: float
     fee: float
+    tax: float
     reference: str
     type: TransactionType
     payment_method: PaymentMethod
@@ -25,7 +25,7 @@ class TransactionUpdate(TransactionBase):
     id: int
 
 
-class Transaction(TransactionBase):
+class TransactionSchema(TransactionBase):
     id: int
     created_at: datetime
     updated_at: datetime
