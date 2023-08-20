@@ -1,6 +1,7 @@
 # FIDO BACKEND CHALLENGE
 
 [![Testing](https://github.com/horlali/fido-challenge/actions/workflows/testing.yml/badge.svg)](https://github.com/horlali/fido-challenge/actions/workflows/testing.yml)
+[![codecov](https://codecov.io/gh/horlali/fido-challenge/graph/badge.svg?token=8ZBXPZYFLV)](https://codecov.io/gh/horlali/fido-challenge)
 
 RESTful API using FastAPI, focusing on transactions and user interactions integral to Fido's services.
 
@@ -30,6 +31,14 @@ You can also add the `-d` flag to run the docker container as a daemon
 ```bash
 ./scripts/run-docker.sh -d
 ```
+
+## Sample Request and Application Docs
+
+Once the application is up and running, visit <http://127.0.0.1:8000/> or <http://localhost:8000> or in your browser
+
+You should see a Swagger Documentation Page like this
+
+![Alt text](docs/screenshots/home.png)
 
 ## Known issues
 
@@ -84,11 +93,3 @@ In the root of the repository `:~/fido-challenge` run the scripts below
 ```bash
 ./scripts/run-linters.sh # add --fix flag to fix formatting/linting issues
 ```
-
-## Sample Request and Application Docs
-
-Once the application is up and running, visit <http://127.0.0.1:8000/> or <http://localhost:8000> or in your browser
-
-You should see a Swagger Documentation Page like this
-
-![Alt text](docs/screenshots/home.png)
