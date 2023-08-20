@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from sqlalchemy_utils import create_database, drop_database
+from sqlalchemy_utils import drop_database
 
 from fido_app.core.database import Base, get_db
 from fido_app.main import app
