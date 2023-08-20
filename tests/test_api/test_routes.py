@@ -1,5 +1,4 @@
-from fido_app.api.transactions.models import TransactionDB
-from tests.config import client, override_get_db
+from tests.config import client
 
 
 def test_create_transaction(transaction):

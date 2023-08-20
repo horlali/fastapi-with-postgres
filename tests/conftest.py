@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pytest
 
 
@@ -7,7 +5,6 @@ import pytest
 def transaction():
     return {
         "user_id": 1,
-        "date": datetime.now().isoformat(),
         "date": "2023-08-20T13:16:27.541000",
         "amount": 100.0,
         "fee": 0.0,
