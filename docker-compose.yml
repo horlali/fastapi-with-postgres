@@ -29,5 +29,5 @@ services:
     #   - fido_service.db
     container_name: fido_service-api
 
-volumes:
-  fido_service_data:
+# volumes:
+#   fido_service_data:
