@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from fido_app.analytics.maths import user_average_transaction, user_max_transaction_day
+from fido_app.analytics.stats import user_average_transaction, user_max_transaction_day
 from fido_app.api.transactions.models import TransactionDB
 from fido_app.api.transactions.schemas import (
     TransactionCreate,
