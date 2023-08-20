@@ -1,27 +1,16 @@
-from tests.config import client
+from fido_app.api.transactions.models import TransactionDB
+from tests.config import client, override_get_db
 
 
-def test_create_transaction():
+def test_create_transaction(transaction):
     url = "/api/v1/transactions/"
-
-    transaction = {
-        "user_id": 1,
-        "date": "2023-08-20T13:16:27.541Z",
-        "amount": 100.0,
-        "fee": 0.0,
-        "tax": 0.0,
-        "reference": "test",
-        "type": "deposit",
-        "payment_method": "credit_card",
-        "status": "completed",
-    }
-
     response = client.post(url, json=transaction)
 
     assert response.status_code == 200
 
     created_transaction = response.json()
     assert created_transaction["user_id"] == transaction["user_id"]
+    assert created_transaction["date"] == transaction["date"]
     assert created_transaction["fee"] == transaction["fee"]
     assert created_transaction["tax"] == transaction["tax"]
     assert created_transaction["type"] == transaction["type"]
