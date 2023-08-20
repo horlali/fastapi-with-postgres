@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from pydantic import BaseModel
 
@@ -32,3 +32,8 @@ class TransactionSchema(TransactionBase):
 
     class Config:
         orm_mode = True
+
+
+class UserStats(BaseModel):
+    average_transaction_value: float
+    day_with_highest_transactions: date

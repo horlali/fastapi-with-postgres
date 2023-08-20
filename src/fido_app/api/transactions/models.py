@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import Column, DateTime, Enum, Float, Integer, String
 
 from fido_app.core.database import Base
@@ -18,5 +20,5 @@ class TransactionDB(Base):
     payment_method = Column(Enum(PaymentMethod), nullable=False)
     status = Column(Enum(TransactionStatus), nullable=False)
 
-    created_at = Column(DateTime)
-    updated_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.now(), nullable=False)
+    updated_at = Column(DateTime, default=datetime.now(), nullable=False)

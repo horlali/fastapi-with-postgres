@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 
+from fido_app.analytics.maths import user_average_transaction, user_max_transaction_day
 from fido_app.api.transactions.models import TransactionDB
 from fido_app.api.transactions.schemas import (
     TransactionCreate,
     TransactionSchema,
     TransactionUpdate,
+    UserStats,
 )
 from fido_app.core.database import Session, get_db
 
@@ -68,3 +70,11 @@ def delete_transaction(transaction_id: int, db: Session = Depends(get_db)):
     db.delete(db_transaction)
     db.commit()
     return {"message": "Transaction deleted successfully"}
+
+
+@transaction_router.get("/users/{user_id}/stats", response_model=UserStats)
+def get_user_stats(user_id: int, db: Session = Depends(get_db)):
+    return UserStats(
+        average_transaction_value=user_average_transaction(user_id),
+        day_with_highest_transactions=user_max_transaction_day(user_id),
+    )
