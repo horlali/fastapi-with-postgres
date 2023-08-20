@@ -15,4 +15,4 @@ app = FastAPI(
     docs_url=settings.DOCS_URL,
 )
 
-app.include_router(transaction_router, prefix="/transactions")
+app.include_router(transaction_router, prefix=settings.API_PREFIX)

@@ -72,8 +72,8 @@ def delete_transaction(transaction_id: int, db: Session = Depends(get_db)):
     return {"message": "Transaction deleted successfully"}
 
 
-@transaction_router.get("/users/{user_id}/stats", response_model=UserStats)
-def get_user_stats(user_id: int, db: Session = Depends(get_db)):
+@transaction_router.get("/analytics/{user_id}", response_model=UserStats)
+def get_user_stats(user_id: int):
     return UserStats(
         average_transaction_value=user_average_transaction(user_id),
         day_with_highest_transactions=user_max_transaction_day(user_id),
