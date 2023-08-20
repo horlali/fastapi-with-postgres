@@ -31,6 +31,14 @@ You can also add the `-d` flag to run the docker container as a daemon
 ./scripts/run-docker.sh -d
 ```
 
+## Sample Request and Application Docs
+
+Once the application is up and running, visit <http://127.0.0.1:8000/> or <http://localhost:8000> or in your browser
+
+You should see a Swagger Documentation Page like this
+
+![Alt text](docs/screenshots/home.png)
+
 ## Known issues
 
 - Due to the disparity in how windows and linux handle line ending you might run into a line ending error which cause the container to fail on start up. See likely error below.
@@ -84,11 +92,3 @@ In the root of the repository `:~/fido-challenge` run the scripts below
 ```bash
 ./scripts/run-linters.sh # add --fix flag to fix formatting/linting issues
 ```
-
-## Sample Request and Application Docs
-
-Once the application is up and running, visit <http://127.0.0.1:8000/> or <http://localhost:8000> or in your browser
-
-You should see a Swagger Documentation Page like this
-
-![Alt text](docs/screenshots/home.png)
