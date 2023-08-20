@@ -1,70 +1,33 @@
 version: "3.7"
 
 services:
-  # Postgres
-  diagnosis.db:
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    volumes:
-      - diagnosis_data:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB_NAME:?err}
-      POSTGRES_USER: ${POSTGRES_USER:?err}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?err}
-    container_name: diagnosis-db
-
-  # Redis
-  redis:
-    image: redis:latest
-    container_name: diagnosis-redis
+  # # Postgres
+  # fido_service.db:
+  #   image: postgres:latest
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - fido_service_data:/var/lib/postgresql/data/
+  #   environment:
+  #     POSTGRES_DB: ${POSTGRES_DB_NAME:?err}
+  #     POSTGRES_USER: ${POSTGRES_USER:?err}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?err}
+  #   container_name: fido_service-db
 
   # Application
-  diagnosis.api:
+  fido_service.api:
     build:
       context: .
       dockerfile: Dockerfile
-    image: diagnosis.api:latest
-    command: ./scripts/run-server.sh --docker --prod
+    image: fido_service.api:latest
+    command: ./scripts/run-server.sh
     ports:
       - "8000:8000"
     volumes:
       - .:/app
-    depends_on:
-      - diagnosis.db
-      - redis
-    container_name: diagnosis-api
+    # depends_on:
+    #   - fido_service.db
+    container_name: fido_service-api
 
-  # Celery
-  diagnosis.celery:
-    build: .
-    image: diagnosis.celery:latest
-    command: ./scripts/run-celery.sh --prod
-    volumes:
-      - .:/app
-    environment:
-      - CELERY_BROKER=${CELERY_BROKER:?err}
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:?err}
-    depends_on:
-      - diagnosis.api
-      - redis
-    container_name: diagnosis-celery
-
-  # Flower
-  diagnosis.flower:
-    build: .
-    image: diagnosis.flower:latest
-    ports:
-      - '5555:5555'
-    command: ./scripts/run-flower.sh --prod
-    environment:
-      - CELERY_BROKER=${CELERY_BROKER:?err}
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:?err}
-    depends_on:
-      - diagnosis.api
-      - redis
-      - diagnosis.celery
-    container_name: diagnosis-flower
-
-volumes:
-  diagnosis_data:
+# volumes:
+#   fido_service_data:

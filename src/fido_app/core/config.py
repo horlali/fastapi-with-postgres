@@ -10,6 +10,7 @@ and user interactions integral to the system.
 
 class Settings(BaseSettings):
     TITLE: str = "FIDO SERVICE CHALLENGE"
+    API_PREFIX: str = "/api/v1"
     VERSION: str = "0.1.0"
     RELEASE_ID: str = "0.0.1"
     DESCRIPTION = description
@@ -18,8 +19,8 @@ class Settings(BaseSettings):
         "identifier": "MIT",
     }
     CONTACT: dict = {
-        "name": "Gideon Ahiadzi",
-        "email": "gideon.ahiadzi@gmail.com",
+        "name": "ele7en",
+        "email": "ele7en@example.com",
         "linkedin": "https://www.linkedin.com/in/ele7en",
     }
 
