@@ -27,38 +27,7 @@ services:
       - .:/app
     # depends_on:
     #   - fido_service.db
-    #   - redis
     container_name: fido_service-api
-  # # Celery
-  # fido_service.celery:
-  #   build: .
-  #   image: fido_service.celery:latest
-  #   command: ./scripts/run-celery.sh
-  #   volumes:
-  #     - .:/app
-  #   environment:
-  #     - CELERY_BROKER=${CELERY_BROKER:?err}
-  #     - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:?err}
-  #   depends_on:
-  #     - fido_service.api
-  #     - redis
-  #   container_name: fido_service-celery
-
-  # # Flower
-  # fido_service.flower:
-  #   build: .
-  #   image: fido_service.flower:latest
-  #   ports:
-  #     - '5555:5555'
-  #   command: ./scripts/run-flower.sh
-  #   environment:
-  #     - CELERY_BROKER=${CELERY_BROKER:?err}
-  #     - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:?err}
-  #   depends_on:
-  #     - fido_service.api
-  #     - redis
-  #     - fido_service.celery
-  #   container_name: fido_service-flower
 
 volumes:
   fido_service_data:
