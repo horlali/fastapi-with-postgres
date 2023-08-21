@@ -79,3 +79,48 @@ def test_read_transactions(
 
     assert response.status_code == 200
     assert len(response.json()) == len(transaction_multiple_data)
+
+
+def test_update_transaction(
+    client: TestClient, transaction_data: Dict, session: Session
+):
+    data = TransactionCreate(**transaction_data)
+    transaction = TransactionDB(**data.dict())
+    session.add(transaction)
+    session.commit()
+
+    url = f"/api/v1/transactions/{transaction.id}"
+    response = client.patch(url, json={"transaction_status": "pending", "amount": 100})
+
+    assert response.status_code == 200
+    assert response.json()["amount"] == 100
+    assert response.json()["transaction_status"] == "pending"
+
+    assert "fee" in response.json()
+    assert "tax" in response.json()
+
+    # Check that the transaction was updated in the database
+    transaction = session.query(TransactionDB).filter_by(id=1).first()
+    assert transaction is not None
+    assert transaction.amount == 100
+    assert transaction.transaction_status == "pending"
+    assert transaction.fee == transaction.calculate_fee()
+    assert transaction.tax == transaction.calculate_tax()
+
+
+def test_delete_transaction(
+    client: TestClient, transaction_data: Dict, session: Session
+):
+    data = TransactionCreate(**transaction_data)
+    transaction = TransactionDB(**data.dict())
+    session.add(transaction)
+    session.commit()
+
+    url = f"/api/v1/transactions/{transaction.id}"
+    response = client.delete(url)
+
+    assert response.status_code == 200
+
+    # Check that the transaction was deleted from the database
+    transaction = session.query(TransactionDB).filter_by(id=1).first()
+    assert transaction is None
