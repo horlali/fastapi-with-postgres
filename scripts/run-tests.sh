@@ -15,6 +15,6 @@ if [ "$1" = "--actions" ];
         poetry run coverage xml
 
 else
-poetry run coverage run -m pytest -s
+poetry run coverage run -m pytest -s -v
 poetry run coverage report -m
 fi
