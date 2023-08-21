@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from fido_app.utils.extentions import PaymentMethod, TransactionStatus, TransactionType
 
@@ -21,7 +21,7 @@ class TransactionBase(BaseModel):
 class TransactionCreate(BaseModel):
     user_id: int
     date: datetime
-    amount: float
+    amount: float = Field(..., gt=0)
     reference: str
     transaction_type: TransactionType
     payment_method: PaymentMethod
@@ -31,7 +31,7 @@ class TransactionCreate(BaseModel):
 class TransactionUpdate(TransactionCreate):
     user_id: Optional[int]
     date: Optional[datetime]
-    amount: Optional[float]
+    amount: Optional[float] = Field(gt=0)
     reference: Optional[str]
     transaction_type: Optional[TransactionType]
     payment_method: Optional[PaymentMethod]

@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
@@ -41,6 +41,20 @@ def test_create_transaction(
     assert transaction.tax == response.json()["tax"]
 
 
+def test_cannot_create_transaction_without_data(client: TestClient):
+    url = "/api/v1/transactions/"
+    response = client.post(url)
+
+    assert response.status_code == 422
+
+
+def test_cannot_create_transaction_with_invalid_data(client: TestClient):
+    url = "/api/v1/transactions/"
+    response = client.post(url, json={"amount": "-24000"})
+
+    assert response.status_code == 422
+
+
 def test_read_transaction(client: TestClient, transaction_data: Dict, session: Session):
     data = TransactionCreate(**transaction_data)
     transaction = TransactionDB(**data.dict())
@@ -66,8 +80,22 @@ def test_read_transaction(client: TestClient, transaction_data: Dict, session: S
     assert "tax" in response.json()
 
 
+def test_read_transaction_not_found(client: TestClient):
+    url = "/api/v1/transactions/9999"
+    response = client.get(url)
+
+    assert response.status_code == 404
+
+
+def test_read_transaction_invalid_id(client: TestClient):
+    url = "/api/v1/transactions/1b3"
+    response = client.get(url)
+
+    assert response.status_code == 422
+
+
 def test_read_transactions(
-    client: TestClient, transaction_multiple_data: Dict, session: Session
+    client: TestClient, transaction_multiple_data: List, session: Session
 ):
     data = [TransactionCreate(**item) for item in transaction_multiple_data]
     transactions = [TransactionDB(**item.dict()) for item in data]
@@ -79,6 +107,30 @@ def test_read_transactions(
 
     assert response.status_code == 200
     assert len(response.json()) == len(transaction_multiple_data)
+
+
+def test_read_transactions_with_filters(
+    client: TestClient, transaction_multiple_data: List, session: Session
+):
+    data = [TransactionCreate(**item) for item in transaction_multiple_data]
+    transactions = [TransactionDB(**item.dict()) for item in data]
+    session.add_all(transactions)
+    session.commit()
+
+    skip, limit = (0, 5)
+    url = f"/api/v1/transactions/?skip={skip}&limit={limit}"
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert len(response.json()) == 5
+
+
+def test_read_transactions_with_invalid_filters(client: TestClient):
+    skip, limit = ("a", "b")
+    url = f"/api/v1/transactions/?skip={skip}&limit={limit}"
+    response = client.get(url)
+
+    assert response.status_code == 422
 
 
 def test_update_transaction(
@@ -108,6 +160,34 @@ def test_update_transaction(
     assert transaction.tax == transaction.calculate_tax()
 
 
+def test_cannot_update_transaction_with_invalid_data(
+    client: TestClient, transaction_data: Dict, session: Session
+):
+    data = TransactionCreate(**transaction_data)
+    transaction = TransactionDB(**data.dict())
+    session.add(transaction)
+    session.commit()
+
+    url = f"/api/v1/transactions/{transaction.id}"
+    response = client.patch(url, json={"amount": -100})
+
+    assert response.status_code == 422
+
+
+def test_cannot_update_transaction_not_found(client: TestClient):
+    url = "/api/v1/transactions/9999"
+    response = client.patch(url, json={"transaction_status": "pending"})
+    print(response.json())
+    assert response.status_code == 404
+
+
+def test_cannot_update_transaction_invalid_id(client: TestClient):
+    url = "/api/v1/transactions/1b3"
+    response = client.patch(url, json={"transaction_status": "pending"})
+
+    assert response.status_code == 422
+
+
 def test_delete_transaction(
     client: TestClient, transaction_data: Dict, session: Session
 ):
@@ -124,3 +204,17 @@ def test_delete_transaction(
     # Check that the transaction was deleted from the database
     transaction = session.query(TransactionDB).filter_by(id=1).first()
     assert transaction is None
+
+
+def test_cannot_delete_transaction_not_found(client: TestClient):
+    url = "/api/v1/transactions/9999"
+    response = client.delete(url)
+
+    assert response.status_code == 404
+
+
+def test_cannot_delete_transaction_invalid_id(client: TestClient):
+    url = "/api/v1/transactions/1b3"
+    response = client.delete(url)
+
+    assert response.status_code == 422
