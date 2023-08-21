@@ -17,9 +17,9 @@ def transaction():
         "fee": 0.0,
         "tax": 0.0,
         "reference": "test",
-        "type": "deposit",
+        "transaction_type": "deposit",
         "payment_method": "credit_card",
-        "status": "completed",
+        "transaction_status": "completed",
     }
 
 

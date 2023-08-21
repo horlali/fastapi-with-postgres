@@ -46,7 +46,7 @@ async def read_transactions(
     return db.query(TransactionDB).offset(skip).limit(limit).all()
 
 
-@transaction_router.put(
+@transaction_router.patch(
     "/transactions/{transaction_id}", response_model=TransactionSchema
 )
 async def update_transaction(
@@ -62,7 +62,8 @@ async def update_transaction(
         raise HTTPException(status_code=404, detail="Transaction not found")
 
     for field, value in transaction:
-        setattr(db_transaction, field, value)
+        if value is not None:
+            setattr(db_transaction, field, value)
 
     db.commit()
     db.refresh(db_transaction)
