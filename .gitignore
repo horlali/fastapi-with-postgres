@@ -7,6 +7,7 @@ local_settings.py
 dump.rdb
 db.sqlite3
 db.sqlite3-journal
+db_test.sqlite3
 media
 dummy.py
 

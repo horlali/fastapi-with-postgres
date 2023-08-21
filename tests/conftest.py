@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from fido_app.core.database import Base, get_db
 from fido_app.main import app
 
-TestingDB = "sqlite:///./test.db"
+TestingDB = "sqlite:///./db_test.sqlite3"
 
 engine = create_engine(TestingDB)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

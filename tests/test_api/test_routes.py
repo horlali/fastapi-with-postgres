@@ -1,7 +1,14 @@
-# import pytest
+from typing import Dict
+
+from fastapi.testclient import TestClient
+from sqlalchemy.orm import Session
+
+from fido_app.api.transactions.models import TransactionDB
 
 
-def test_create_transaction(client, transaction_data):
+def test_create_transaction(
+    client: TestClient, transaction_data: Dict, session: Session
+):
     url = "/api/v1/transactions/"
     response = client.post(url, json=transaction_data)
 
@@ -19,3 +26,15 @@ def test_create_transaction(client, transaction_data):
 
     assert "fee" in response.json()
     assert "tax" in response.json()
+
+    # Check that the transaction was saved to the database
+    transaction = session.query(TransactionDB).filter_by(id=1).first()
+    assert transaction is not None
+    assert transaction.user_id == transaction_data["user_id"]
+    assert transaction.amount == transaction_data["amount"]
+    assert transaction.reference == transaction_data["reference"]
+    assert transaction.transaction_type == transaction_data["transaction_type"]
+    assert transaction.payment_method == transaction_data["payment_method"]
+    assert transaction.transaction_status == transaction_data["transaction_status"]
+    assert transaction.fee == response.json()["fee"]
+    assert transaction.tax == response.json()["tax"]
