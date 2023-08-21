@@ -109,7 +109,7 @@ def test_read_transactions(
     assert len(response.json()) == len(transaction_multiple_data)
 
 
-def test_read_transactions_with_filters(
+def test_read_transactions_with_pagination(
     client: TestClient, transaction_multiple_data: List, session: Session
 ):
     data = [TransactionCreate(**item) for item in transaction_multiple_data]
@@ -125,7 +125,7 @@ def test_read_transactions_with_filters(
     assert len(response.json()) == 5
 
 
-def test_read_transactions_with_invalid_filters(client: TestClient):
+def test_read_transactions_with_invalid_pagination(client: TestClient):
     skip, limit = ("a", "b")
     url = f"/api/v1/transactions/?skip={skip}&limit={limit}"
     response = client.get(url)
@@ -177,7 +177,7 @@ def test_cannot_update_transaction_with_invalid_data(
 def test_cannot_update_transaction_not_found(client: TestClient):
     url = "/api/v1/transactions/9999"
     response = client.patch(url, json={"transaction_status": "pending"})
-    print(response.json())
+
     assert response.status_code == 404
 
 

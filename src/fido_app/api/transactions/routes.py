@@ -29,9 +29,7 @@ async def create_transaction(
     "/transactions/{transaction_id}", response_model=TransactionSchema
 )
 async def read_transaction(transaction_id: int, db: Session = Depends(get_db)):
-    db_transaction = (
-        db.query(TransactionDB).filter(TransactionDB.id == transaction_id).first()
-    )
+    db_transaction = db.query(TransactionDB).filter_by(id=transaction_id).first()
 
     if db_transaction is None:
         raise HTTPException(status_code=404, detail="Transaction not found")
@@ -54,9 +52,7 @@ async def update_transaction(
     transaction: TransactionUpdate,
     db: Session = Depends(get_db),
 ):
-    db_transaction = (
-        db.query(TransactionDB).filter(TransactionDB.id == transaction_id).first()
-    )
+    db_transaction = db.query(TransactionDB).filter_by(id=transaction_id).first()
 
     if db_transaction is None:
         raise HTTPException(status_code=404, detail="Transaction not found")
@@ -73,9 +69,7 @@ async def update_transaction(
 
 @transaction_router.delete("/transactions/{transaction_id}")
 async def delete_transaction(transaction_id: int, db: Session = Depends(get_db)):
-    db_transaction = (
-        db.query(TransactionDB).filter(TransactionDB.id == transaction_id).first()
-    )
+    db_transaction = db.query(TransactionDB).filter_by(id=transaction_id).first()
 
     if db_transaction is None:
         raise HTTPException(status_code=404, detail="Transaction not found")

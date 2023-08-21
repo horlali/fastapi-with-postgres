@@ -25,10 +25,10 @@ class TransactionDB(Base):
     updated_at = Column(DateTime, default=datetime.now(), nullable=False)
 
     @validates("amount")
-    def validate_amount(self, key, amount):
-        if amount < 0:
+    def validate_amount(self, key, value):
+        if value < 0:
             raise ValueError("Amount cannot be negative.")
-        return amount
+        return value
 
     def calculate_fee(self):
         return self.amount * 0.02
