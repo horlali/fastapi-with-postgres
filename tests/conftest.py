@@ -46,3 +46,36 @@ def transaction_data():
         "payment_method": "credit_card",
         "transaction_status": "completed",
     }
+
+
+@pytest.fixture
+def transaction_multiple_data():
+    return [
+        {
+            "user_id": 1,
+            "date": "2023-08-21T11:37:21.630000",
+            "amount": 45000,
+            "reference": "Sweet Momma",
+            "transaction_type": "deposit",
+            "payment_method": "credit_card",
+            "transaction_status": "completed",
+        },
+        {
+            "user_id": 2,
+            "date": "2023-08-21T11:37:21.630000",
+            "amount": 65000,
+            "reference": "123456789",
+            "transaction_type": "deposit",
+            "payment_method": "credit_card",
+            "transaction_status": "completed",
+        },
+        {
+            "user_id": 3,
+            "date": "2023-08-21T11:37:21.630000",
+            "amount": 85000,
+            "reference": "Payment for lunch",
+            "transaction_type": "deposit",
+            "payment_method": "credit_card",
+            "transaction_status": "completed",
+        },
+    ]
