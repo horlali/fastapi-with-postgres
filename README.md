@@ -91,5 +91,5 @@ The `run-linters.sh` file in the `scripts/` folder tcan be used to check and cor
 In the root of the repository `:~/fido-challenge` run the scripts below
 
 ```bash
-./scripts/run-linters.sh # add --fix flag to fix formatting/linting issues
+./scripts/run-linters.sh # add --fix flag to fix black and/or isort linting issues
 ```
