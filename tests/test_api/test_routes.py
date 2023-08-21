@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from fido_app.api.transactions.models import TransactionDB
-from fido_app.api.transactions.schemas import TransactionCreate, TransactionSchema
+from fido_app.api.transactions.schemas import TransactionCreate
 
 
 def test_create_transaction(
