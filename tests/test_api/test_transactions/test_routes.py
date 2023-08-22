@@ -109,7 +109,7 @@ def test_read_transactions(
     assert len(response.json()) == len(transaction_multiple_data)
 
 
-def test_read_transactions_with_filters(
+def test_read_transactions_with_pagination(
     client: TestClient, transaction_multiple_data: List, session: Session
 ):
     data = [TransactionCreate(**item) for item in transaction_multiple_data]
@@ -117,17 +117,17 @@ def test_read_transactions_with_filters(
     session.add_all(transactions)
     session.commit()
 
-    skip, limit = (0, 5)
-    url = f"/api/v1/transactions/?skip={skip}&limit={limit}"
+    offset, limit = (0, 5)
+    url = f"/api/v1/transactions/?offset={offset}&limit={limit}"
     response = client.get(url)
 
     assert response.status_code == 200
     assert len(response.json()) == 5
 
 
-def test_read_transactions_with_invalid_filters(client: TestClient):
-    skip, limit = ("a", "b")
-    url = f"/api/v1/transactions/?skip={skip}&limit={limit}"
+def test_read_transactions_with_invalid_pagination(client: TestClient):
+    offset, limit = ("a", "b")
+    url = f"/api/v1/transactions/?offset={offset}&limit={limit}"
     response = client.get(url)
 
     assert response.status_code == 422
@@ -177,7 +177,7 @@ def test_cannot_update_transaction_with_invalid_data(
 def test_cannot_update_transaction_not_found(client: TestClient):
     url = "/api/v1/transactions/9999"
     response = client.patch(url, json={"transaction_status": "pending"})
-    print(response.json())
+
     assert response.status_code == 404
 
 
@@ -216,5 +216,34 @@ def test_cannot_delete_transaction_not_found(client: TestClient):
 def test_cannot_delete_transaction_invalid_id(client: TestClient):
     url = "/api/v1/transactions/1b3"
     response = client.delete(url)
+
+    assert response.status_code == 422
+
+
+def test_get_user_stats(
+    client: TestClient, transaction_multiple_data: List, session: Session
+):
+    data = [TransactionCreate(**item) for item in transaction_multiple_data]
+    transactions = [TransactionDB(**item.dict()) for item in data]
+    session.add_all(transactions)
+    session.commit()
+
+    url = f"/api/v1/analytics/{transactions[0].user_id}"
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+
+def test_get_user_stats_for_invalid_user(client: TestClient, session: Session):
+    url = "/api/v1/analytics/9999"
+    response = client.get(url)
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "User not found"}
+
+
+def test_get_user_stats_for_invalid_user_id(client: TestClient, session: Session):
+    url = "/api/v1/analytics/1b3"
+    response = client.get(url)
 
     assert response.status_code == 422
