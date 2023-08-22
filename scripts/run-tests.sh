@@ -10,7 +10,7 @@ cd $(dirname $0)/..
 # used by GitHub Actions and CodeCov for coverage reports.
 if [ "$1" = "--actions" ];
     then
-        poetry run coverage run -m pytest
+        poetry run coverage run -m pytest -v
         poetry run coverage report --fail-under=80
         poetry run coverage xml
 

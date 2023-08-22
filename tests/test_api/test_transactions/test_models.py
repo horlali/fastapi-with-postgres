@@ -10,7 +10,7 @@ from fido_app.api.transactions.models import (
 )
 
 
-def test_transactiondb_model(session):
+def test_transactiondb_model():
     # Create a new transaction
     transaction = TransactionDB(
         user_id=1,
