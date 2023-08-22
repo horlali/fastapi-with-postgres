@@ -1,8 +1,6 @@
-from fastapi import HTTPException
-from sqlalchemy import extract, func
-
 from fido_app.api.transactions.models import TransactionDB
 from fido_app.core.database import Session
+from fido_app.utils.extentions import UserNotFoundError
 
 
 def user_average_transaction(user_id: int):
@@ -14,37 +12,32 @@ def user_average_transaction(user_id: int):
         user_transactions = db.query(TransactionDB).filter_by(user_id=user_id).all()
 
         if not user_transactions:
-            raise HTTPException(status_code=404, detail="User not found")
+            raise UserNotFoundError("User not found")
 
-        total_amount = sum(transaction.amount for transaction in user_transactions)
-        average_amount = total_amount / len(user_transactions)
+        average_amount = sum(
+            transaction.amount for transaction in user_transactions
+        ) / len(user_transactions)
 
         return average_amount
 
 
-def user_max_transaction_day(user_id: int):
+def user_highest_transaction(user_id: int):
     """
     Calculates the day with the highest number of transactions for a given user
     """
 
     with Session() as db:
-        user_transactions = db.query(TransactionDB).filter_by(user_id=user_id).all()
-
-        if not user_transactions:
-            raise HTTPException(status_code=404, detail="User not found")
-
-        transaction_count_by_day = (
-            db.query(
-                func.count(TransactionDB.id), extract("day", TransactionDB.created_at)
+        highest_transaction = (
+            db.query(TransactionDB)
+            .filter_by(user_id=user_id)
+            .order_by(
+                TransactionDB.amount.desc(),
+                TransactionDB.date.desc(),
             )
-            .filter(TransactionDB.user_id == user_id)
-            .group_by(extract("day", TransactionDB.created_at))
-            .all()
-        )
-        transaction_count_by_day = dict(transaction_count_by_day)
-
-        max_transaction_day = max(
-            transaction_count_by_day, key=transaction_count_by_day.get
+            .first()
         )
 
-        return max_transaction_day
+        if not highest_transaction:
+            raise UserNotFoundError("User not found")
+
+        return {"amount": highest_transaction.amount, "date": highest_transaction.date}

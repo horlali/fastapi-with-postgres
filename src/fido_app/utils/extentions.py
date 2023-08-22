@@ -18,3 +18,7 @@ class TransactionStatus(str, Enum):
     COMPLETED = "completed"
     PENDING = "pending"
     FAILED = "failed"
+
+
+class UserNotFoundError(Exception):
+    pass

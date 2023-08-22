@@ -1,5 +1,5 @@
-from datetime import date, datetime
-from typing import Optional
+from datetime import datetime
+from typing import Dict, Optional
 
 from pydantic import BaseModel, Field
 
@@ -49,4 +49,4 @@ class TransactionSchema(TransactionBase):
 
 class UserStats(BaseModel):
     average_transaction_value: float
-    day_with_highest_transactions: date
+    highest_transaction: Dict[str, float | datetime]

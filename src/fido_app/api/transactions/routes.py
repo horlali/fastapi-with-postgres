@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from fido_app.analytics.stats import user_average_transaction, user_max_transaction_day
+from fido_app.analytics.stats import user_average_transaction, user_highest_transaction
 from fido_app.api.transactions.models import TransactionDB
 from fido_app.api.transactions.schemas import (
     TransactionCreate,
@@ -9,6 +9,7 @@ from fido_app.api.transactions.schemas import (
     UserStats,
 )
 from fido_app.core.database import Session, get_db
+from fido_app.utils.extentions import UserNotFoundError
 
 transaction_router = APIRouter()
 
@@ -82,7 +83,11 @@ async def delete_transaction(transaction_id: int, db: Session = Depends(get_db))
 
 @transaction_router.get("/analytics/{user_id}", response_model=UserStats)
 async def get_user_stats(user_id: int):
-    return UserStats(
-        average_transaction_value=user_average_transaction(user_id),
-        day_with_highest_transactions=user_max_transaction_day(user_id),
-    )
+    try:
+        return UserStats(
+            average_transaction_value=user_average_transaction(user_id),
+            highest_transaction=user_highest_transaction(user_id),
+        )
+
+    except UserNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
