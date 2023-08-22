@@ -82,11 +82,11 @@ async def delete_transaction(transaction_id: int, db: Session = Depends(get_db))
 
 
 @transaction_router.get("/analytics/{user_id}", response_model=UserStats)
-async def get_user_stats(user_id: int):
+async def get_user_stats(user_id: int, db: Session = Depends(get_db)):
     try:
         return UserStats(
-            average_transaction_value=user_average_transaction(user_id),
-            highest_transaction=user_highest_transaction(user_id),
+            average_transaction_value=user_average_transaction(user_id, db),
+            highest_transaction=user_highest_transaction(user_id, db),
         )
 
     except UserNotFoundError as e:

@@ -218,3 +218,32 @@ def test_cannot_delete_transaction_invalid_id(client: TestClient):
     response = client.delete(url)
 
     assert response.status_code == 422
+
+
+def test_get_user_stats(
+    client: TestClient, transaction_multiple_data: List, session: Session
+):
+    data = [TransactionCreate(**item) for item in transaction_multiple_data]
+    transactions = [TransactionDB(**item.dict()) for item in data]
+    session.add_all(transactions)
+    session.commit()
+
+    url = f"/api/v1/analytics/{transactions[0].user_id}"
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+
+def test_get_user_stats_for_invalid_user(client: TestClient, session: Session):
+    url = "/api/v1/analytics/9999"
+    response = client.get(url)
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "User not found"}
+
+
+def test_get_user_stats_for_invalid_user_id(client: TestClient, session: Session):
+    url = "/api/v1/analytics/1b3"
+    response = client.get(url)
+
+    assert response.status_code == 422
