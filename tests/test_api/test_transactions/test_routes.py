@@ -117,8 +117,8 @@ def test_read_transactions_with_pagination(
     session.add_all(transactions)
     session.commit()
 
-    skip, limit = (0, 5)
-    url = f"/api/v1/transactions/?skip={skip}&limit={limit}"
+    offset, limit = (0, 5)
+    url = f"/api/v1/transactions/?offset={offset}&limit={limit}"
     response = client.get(url)
 
     assert response.status_code == 200
@@ -126,8 +126,8 @@ def test_read_transactions_with_pagination(
 
 
 def test_read_transactions_with_invalid_pagination(client: TestClient):
-    skip, limit = ("a", "b")
-    url = f"/api/v1/transactions/?skip={skip}&limit={limit}"
+    offset, limit = ("a", "b")
+    url = f"/api/v1/transactions/?offset={offset}&limit={limit}"
     response = client.get(url)
 
     assert response.status_code == 422

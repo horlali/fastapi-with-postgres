@@ -39,9 +39,9 @@ async def read_transaction(transaction_id: int, db: Session = Depends(get_db)):
 
 @transaction_router.get("/transactions/", response_model=list[TransactionSchema])
 async def read_transactions(
-    skip: int = 0, limit: int = 10, db: Session = Depends(get_db)
+    offset: int = 0, limit: int = 10, db: Session = Depends(get_db)
 ):
-    return db.query(TransactionDB).offset(skip).limit(limit).all()
+    return db.query(TransactionDB).offset(offset).limit(limit).all()
 
 
 @transaction_router.patch(

@@ -11,9 +11,7 @@ def user_average_transaction(user_id: int):
     """
 
     with Session() as db:
-        user_transactions = (
-            db.query(TransactionDB).filter(user_id=TransactionDB.user_id).all()
-        )
+        user_transactions = db.query(TransactionDB).filter_by(user_id=user_id).all()
 
         if not user_transactions:
             raise HTTPException(status_code=404, detail="User not found")
@@ -30,9 +28,7 @@ def user_max_transaction_day(user_id: int):
     """
 
     with Session() as db:
-        user_transactions = (
-            db.query(TransactionDB).filter(user_id=TransactionDB.user_id).all()
-        )
+        user_transactions = db.query(TransactionDB).filter_by(user_id=user_id).all()
 
         if not user_transactions:
             raise HTTPException(status_code=404, detail="User not found")
