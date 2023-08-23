@@ -2,17 +2,17 @@ version: "3.7"
 
 services:
   # # Postgres
-  # fido_service.db:
-  #   image: postgres:latest
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - fido_service_data:/var/lib/postgresql/data/
-  #   environment:
-  #     POSTGRES_DB: ${POSTGRES_DB_NAME:?err}
-  #     POSTGRES_USER: ${POSTGRES_USER:?err}
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?err}
-  #   container_name: fido_service-db
+  fido_service.db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - fido_service_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_NAME:?err}
+      POSTGRES_USER: ${POSTGRES_USER:?err}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?err}
+    container_name: fido_service-db
 
   # Application
   fido_service.api:
@@ -25,9 +25,9 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-    # depends_on:
-    #   - fido_service.db
+    depends_on:
+      - fido_service.db
     container_name: fido_service-api
 
-# volumes:
-#   fido_service_data:
+volumes:
+  fido_service_data:

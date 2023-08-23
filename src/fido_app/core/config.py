@@ -1,6 +1,11 @@
+import os
 from pathlib import Path
 
+from dotenv import load_dotenv
 from pydantic import BaseSettings
+
+ROOT_DIR: Path = Path(__file__).resolve().parent.parent.parent.parent
+load_dotenv(os.path.join(ROOT_DIR, ".env.dev"))
 
 description = """
 RESTful API using FastAPI, focusing on transactions
@@ -25,7 +30,7 @@ class Settings(BaseSettings):
     }
 
     DOCS_URL: str = "/"
-    BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
+    DATABASE_URL: str = os.getenv("DATABASE_URL")
 
     class Config:
         case_sensitive = True

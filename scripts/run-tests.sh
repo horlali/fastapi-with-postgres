@@ -5,6 +5,8 @@ set -e
 # Go to backend folder
 cd $(dirname $0)/..
 
+# Export environment variables
+export DATABASE_URL=sqlite:///./db.sqlite3
 
 # The --actions flag writes a coverage.xml file which is 
 # used by GitHub Actions and CodeCov for coverage reports.
