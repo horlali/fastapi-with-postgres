@@ -18,4 +18,4 @@ if [ "$1" = "-d" ];
 fi
 
 
-docker compose -f docker-compose.yml --env-file ${ENV_FILE} up ${DAEMON} --build
+docker compose -f docker-compose.yml up ${DAEMON} --build
