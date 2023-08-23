@@ -13,7 +13,6 @@ uvicorn = "^0.23.2"
 pydantic = "<2.0.0"
 sqlalchemy = "^2.0.20"
 python-dotenv = "^1.0.0"
-sqlalchemy-utils = "^0.41.1"
 httpx = "^0.24.1"
 
 [tool.poetry.group.dev.dependencies]
