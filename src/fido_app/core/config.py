@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     }
 
     DOCS_URL: str = "/"
-    DATABASE_URL: str = os.getenv("DATABASE_URL")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./db.sqlite3")
 
     class Config:
         case_sensitive = True
