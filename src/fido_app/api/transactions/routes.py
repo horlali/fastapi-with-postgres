@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
 from fido_app.analytics.stats import user_average_transaction, user_highest_transaction
 from fido_app.api.transactions.models import TransactionDB
@@ -8,7 +9,7 @@ from fido_app.api.transactions.schemas import (
     TransactionUpdate,
     UserStats,
 )
-from fido_app.core.database import Session, get_db
+from fido_app.core.database import get_db
 from fido_app.utils.extentions import UserNotFoundError
 
 transaction_router = APIRouter()
