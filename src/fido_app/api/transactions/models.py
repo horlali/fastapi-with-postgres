@@ -38,12 +38,12 @@ class TransactionDB(Base):
 
 
 @event.listens_for(TransactionDB, "before_insert")
-def calculate_fee_tax_on_insert(mapper, connection, target):
+def calculate_fee_tax_on_insert(mapper, connection, target: TransactionDB):
     target.fee = target.calculate_fee()
     target.tax = target.calculate_tax()
 
 
 @event.listens_for(TransactionDB, "before_update")
-def calculate_fee_tax_on_update(mapper, connection, target):
+def calculate_fee_tax_on_update(mapper, connection, target: TransactionDB):
     target.fee = target.calculate_fee()
     target.tax = target.calculate_tax()
