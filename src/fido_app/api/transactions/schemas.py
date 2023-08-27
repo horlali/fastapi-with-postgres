@@ -8,6 +8,7 @@ from fido_app.utils.extentions import PaymentMethod, TransactionStatus, Transact
 
 class TransactionBase(BaseModel):
     user_id: int
+    full_name: str
     date: datetime
     amount: float
     fee: float
@@ -20,6 +21,7 @@ class TransactionBase(BaseModel):
 
 class TransactionCreate(BaseModel):
     user_id: int
+    full_name: str
     date: datetime
     amount: float = Field(..., gt=0)
     reference: str
@@ -30,6 +32,7 @@ class TransactionCreate(BaseModel):
 
 class TransactionUpdate(TransactionCreate):
     user_id: Optional[int]
+    full_name: Optional[str]
     date: Optional[datetime]
     amount: Optional[float] = Field(gt=0)
     reference: Optional[str]

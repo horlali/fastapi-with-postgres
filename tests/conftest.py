@@ -1,4 +1,7 @@
+import random
+
 import pytest
+from faker import Faker
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -6,10 +9,16 @@ from sqlalchemy.orm import sessionmaker
 from fido_app.core.database import Base, get_db
 from fido_app.main import app
 
+fake = Faker()
+
 TestingDB = "sqlite:///./db_test.sqlite3"
 
 engine = create_engine(TestingDB)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+payment_types = ["credit_card", "mobile_money", "bank_transfer"]
+transaction_status = ["completed", "pending", "failed"]
+transaction_types = ["credit", "debit"]
 
 
 @pytest.fixture
@@ -38,13 +47,14 @@ def client(session):
 @pytest.fixture
 def transaction_data():
     return {
-        "user_id": 1,
-        "date": "2023-08-21T11:37:21.630000",
-        "amount": 45000,
-        "reference": "123456789",
-        "transaction_type": "deposit",
-        "payment_method": "credit_card",
-        "transaction_status": "completed",
+        "user_id": random.randint(1, 100),
+        "full_name": fake.name(),
+        "date": fake.iso8601(tzinfo=None),
+        "amount": random.randint(1_000, 10_000_000),
+        "reference": fake.text(max_nb_chars=20),
+        "transaction_type": random.choice(transaction_types),
+        "payment_method": random.choice(payment_types),
+        "transaction_status": random.choice(transaction_status),
     }
 
 
@@ -52,93 +62,103 @@ def transaction_data():
 def transaction_multiple_data():
     return [
         {
-            "user_id": 1,
-            "date": "2023-01-21T11:37:21.630000",
-            "amount": 245000,
-            "reference": "Payment for lunch",
-            "transaction_type": "deposit",
-            "payment_method": "credit_card",
-            "transaction_status": "completed",
+            "user_id": random.randint(1, 100),
+            "full_name": fake.name(),
+            "date": fake.iso8601(tzinfo=None),
+            "amount": random.randint(1_000, 10_000_000),
+            "reference": fake.text(max_nb_chars=20),
+            "transaction_type": random.choice(transaction_types),
+            "payment_method": random.choice(payment_types),
+            "transaction_status": random.choice(transaction_status),
         },
         {
-            "user_id": 1,
-            "date": "2023-02-21T11:37:21.630000",
-            "amount": 105000,
-            "reference": "Payment for lunch",
-            "transaction_type": "deposit",
-            "payment_method": "credit_card",
-            "transaction_status": "completed",
+            "user_id": random.randint(1, 100),
+            "full_name": fake.name(),
+            "date": fake.iso8601(tzinfo=None),
+            "amount": random.randint(1_000, 10_000_000),
+            "reference": fake.text(max_nb_chars=20),
+            "transaction_type": random.choice(transaction_types),
+            "payment_method": random.choice(payment_types),
+            "transaction_status": random.choice(transaction_status),
         },
         {
-            "user_id": 1,
-            "date": "2023-03-21T11:37:21.630000",
-            "amount": 125000,
-            "reference": "Payment for lunch",
-            "transaction_type": "deposit",
-            "payment_method": "credit_card",
-            "transaction_status": "completed",
+            "user_id": random.randint(1, 100),
+            "full_name": fake.name(),
+            "date": fake.iso8601(tzinfo=None),
+            "amount": random.randint(1_000, 10_000_000),
+            "reference": fake.text(max_nb_chars=20),
+            "transaction_type": random.choice(transaction_types),
+            "payment_method": random.choice(payment_types),
+            "transaction_status": random.choice(transaction_status),
         },
         {
-            "user_id": 1,
-            "date": "2023-04-21T11:37:21.630000",
-            "amount": 145000,
-            "reference": "Payment for lunch",
-            "transaction_type": "deposit",
-            "payment_method": "credit_card",
-            "transaction_status": "completed",
+            "user_id": random.randint(1, 100),
+            "full_name": fake.name(),
+            "date": fake.iso8601(tzinfo=None),
+            "amount": random.randint(1_000, 10_000_000),
+            "reference": fake.text(max_nb_chars=20),
+            "transaction_type": random.choice(transaction_types),
+            "payment_method": random.choice(payment_types),
+            "transaction_status": random.choice(transaction_status),
         },
         {
-            "user_id": 1,
-            "date": "2023-05-21T11:37:21.630000",
-            "amount": 160000,
-            "reference": "Payment for lunch",
-            "transaction_type": "deposit",
-            "payment_method": "credit_card",
-            "transaction_status": "completed",
+            "user_id": random.randint(1, 100),
+            "full_name": fake.name(),
+            "date": fake.iso8601(tzinfo=None),
+            "amount": random.randint(1_000, 10_000_000),
+            "reference": fake.text(max_nb_chars=20),
+            "transaction_type": random.choice(transaction_types),
+            "payment_method": random.choice(payment_types),
+            "transaction_status": random.choice(transaction_status),
         },
         {
-            "user_id": 1,
-            "date": "2023-06-21T11:37:21.630000",
-            "amount": 185000,
-            "reference": "Payment for lunch",
-            "transaction_type": "deposit",
-            "payment_method": "credit_card",
-            "transaction_status": "completed",
+            "user_id": random.randint(1, 100),
+            "full_name": fake.name(),
+            "date": fake.iso8601(tzinfo=None),
+            "amount": random.randint(1_000, 10_000_000),
+            "reference": fake.text(max_nb_chars=20),
+            "transaction_type": random.choice(transaction_types),
+            "payment_method": random.choice(payment_types),
+            "transaction_status": random.choice(transaction_status),
         },
         {
-            "user_id": 1,
-            "date": "2023-07-21T11:37:21.630000",
-            "amount": 225000,
-            "reference": "Payment for lunch",
-            "transaction_type": "deposit",
-            "payment_method": "credit_card",
-            "transaction_status": "completed",
+            "user_id": random.randint(1, 100),
+            "full_name": fake.name(),
+            "date": fake.iso8601(tzinfo=None),
+            "amount": random.randint(1_000, 10_000_000),
+            "reference": fake.text(max_nb_chars=20),
+            "transaction_type": random.choice(transaction_types),
+            "payment_method": random.choice(payment_types),
+            "transaction_status": random.choice(transaction_status),
         },
         {
-            "user_id": 1,
-            "date": "2023-10-21T11:37:21.630000",
-            "amount": 85000,
-            "reference": "Payment for lunch",
-            "transaction_type": "deposit",
-            "payment_method": "credit_card",
-            "transaction_status": "completed",
+            "user_id": random.randint(1, 100),
+            "full_name": fake.name(),
+            "date": fake.iso8601(tzinfo=None),
+            "amount": random.randint(1_000, 10_000_000),
+            "reference": fake.text(max_nb_chars=20),
+            "transaction_type": random.choice(transaction_types),
+            "payment_method": random.choice(payment_types),
+            "transaction_status": random.choice(transaction_status),
         },
         {
-            "user_id": 1,
-            "date": "2023-11-21T11:37:21.630000",
-            "amount": 65000,
-            "reference": "123456789",
-            "transaction_type": "deposit",
-            "payment_method": "credit_card",
-            "transaction_status": "completed",
+            "user_id": random.randint(1, 100),
+            "full_name": fake.name(),
+            "date": fake.iso8601(tzinfo=None),
+            "amount": random.randint(1_000, 10_000_000),
+            "reference": fake.text(max_nb_chars=20),
+            "transaction_type": random.choice(transaction_types),
+            "payment_method": random.choice(payment_types),
+            "transaction_status": random.choice(transaction_status),
         },
         {
-            "user_id": 1,
-            "date": "2023-12-21T11:37:21.630000",
-            "amount": 45000,
-            "reference": "Sweet Momma",
-            "transaction_type": "deposit",
-            "payment_method": "credit_card",
-            "transaction_status": "completed",
+            "user_id": random.randint(1, 100),
+            "full_name": fake.name(),
+            "date": fake.iso8601(tzinfo=None),
+            "amount": random.randint(1_000, 10_000_000),
+            "reference": fake.text(max_nb_chars=20),
+            "transaction_type": random.choice(transaction_types),
+            "payment_method": random.choice(payment_types),
+            "transaction_status": random.choice(transaction_status),
         },
     ]

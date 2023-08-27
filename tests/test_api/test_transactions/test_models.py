@@ -14,12 +14,13 @@ def test_transactiondb_model():
     # Create a new transaction
     transaction = TransactionDB(
         user_id=1,
+        full_name="John Doe",
         date=datetime.now(),
         amount=100.0,
         fee=None,
         tax=None,
         reference="123456",
-        transaction_type=TransactionType.DEPOSIT,
+        transaction_type=TransactionType.CREDIT,
         payment_method=PaymentMethod.BANK_TRANSFER,
         transaction_status=TransactionStatus.COMPLETED,
         created_at=datetime.now(),
@@ -28,9 +29,10 @@ def test_transactiondb_model():
 
     # Test that the transaction was created correctly
     assert transaction.user_id == 1
+    assert transaction.full_name == "John Doe"
     assert transaction.amount == 100.0
     assert transaction.reference == "123456"
-    assert transaction.transaction_type == TransactionType.DEPOSIT
+    assert transaction.transaction_type == TransactionType.CREDIT
     assert transaction.payment_method == PaymentMethod.BANK_TRANSFER
     assert transaction.transaction_status == TransactionStatus.COMPLETED
 
