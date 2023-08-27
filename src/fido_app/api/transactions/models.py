@@ -12,6 +12,7 @@ class TransactionDB(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer)
+    full_name = Column(String)
     date = Column(DateTime)
     amount = Column(Float, nullable=False)
     fee = Column(Float)

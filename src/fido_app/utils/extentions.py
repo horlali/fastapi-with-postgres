@@ -8,10 +8,8 @@ class PaymentMethod(str, Enum):
 
 
 class TransactionType(str, Enum):
-    DEPOSIT = "deposit"
-    WITHDRAWAL = "withdrawal"
-    TRANSFER = "transfer"
-    REFUND = "refund"
+    CREDIT = "credit"
+    DEBIT = "debit"
 
 
 class TransactionStatus(str, Enum):
