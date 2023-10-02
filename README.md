@@ -1,9 +1,9 @@
-# FIDO BACKEND CHALLENGE
+# FINANCIAL TRANSACTION CHALLENGE
 
 [![Testing](https://github.com/horlali/fido-challenge/actions/workflows/testing.yml/badge.svg)](https://github.com/horlali/fido-challenge/actions/workflows/testing.yml)
 [![codecov](https://codecov.io/gh/horlali/fido-challenge/graph/badge.svg?token=8ZBXPZYFLV)](https://codecov.io/gh/horlali/fido-challenge)
 
-RESTful API using FastAPI, focusing on transactions and user interactions integral to Fido's services.
+RESTful API using FastAPI, focusing on transactions and user interactions integral to Financial's services.
 
 ## Getting Started
 
